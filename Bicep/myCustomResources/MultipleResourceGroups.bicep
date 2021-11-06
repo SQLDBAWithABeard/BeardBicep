@@ -20,11 +20,18 @@ param rgVirtualNetworksSubnets array
 @description('ResourceGroup/VirtualNetwork/Subnet for the Private Endpoint')
 param peRGVnetSubnet string
 
+var tags = {
+  Demo: 'true'
+  Conference: 'PassSummit'
+  BenIsAwesome: 'Always'
+}
+
 module resourceGroup '../ResourceGroup.bicep' = {
   name: 'deploy-${rgName}'
   params: {
     location: rgLocation
     name: rgName
+    tags: tags
   }
 }
 
@@ -37,6 +44,7 @@ module storageaccount '../Storage/StorageV2.bicep' = {
     isHnsEnabled: true
     networkAclsBypass: 'AzureServices'
     skuName: 'Standard_LRS'
+    tags: tags
   }
   dependsOn:[
     resourceGroup
@@ -90,5 +98,6 @@ module privateendpoint '../Network/PrivateEndpointNoDNS.bicep' = {
     name: '${storageAccountName}-pe'
     privateLinkServiceId: storageaccount.outputs.storageID
     subnetid: pesubnet.id
+    tags: tags
   }
 }
