@@ -1,0 +1,40 @@
+# This is the default template for deploying many resource groups
+
+# each one will contain 2 storage accounts and a number of containers and a private endpoint connected to the Admin Network
+
+trigger: none # will disable CI builds (but not PR builds)
+
+
+parameters:
+- name: environments
+  type: object
+  default: ['dev','uat', 'prod']
+- name: countries
+  type: object
+  default: ['abgl','bxgl','chgl','clgl','cogl','ecgl','frgl','imgl','itgl','ptgl','rugl','skgl','swgl','trgl','ukgl','zgim']
+
+stages:
+- ${{ each country in parameters.countries }}:
+  - ${{ each env in parameters.environments }}:
+    - stage: deploy_${{ country }}_${{ env }}_ResourceGroup
+      dependsOn: [] 
+      variables:          
+        - template: variables/${{ country }}-${{ env }}.yaml
+      jobs:
+        - template: Templates\ZUGHLU\zughlu2storageAccountsKeyVault.yaml@templates
+          parameters:
+            environment: ${{ variables.environment }}
+            projectKey: ${{ variables.projectKey }}
+            azureSubscription: ${{ variables.azureSubscription }}
+            testersGroupObjectId: ${{ variables.testersGroupObjectId }} # the objectid for the testers group
+            releaseManagersGroupObjectId: ${{ variables.releaseManagersGroupObjectId }} # // the objectid for the Release Managers group
+            developersGroupObjectId: ${{ variables.developersGroupObjectId }} # // the objectid for the developers group
+            virtualNetworksSubnets: ${{ variables.virtualNetworksSubnets }} #// The VNet and subnets to deploy the resources
+            privateEndpointvirtualNetworkSubnet: ${{ variables.privateEndpointvirtualNetworkSubnet }} #// the VNet and subnet to create the End Point
+            storageaccount1containers: ${{ variables.storageaccount1containers }} # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
+            storageaccount2containers: ${{ variables.storageaccount2containers }} # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
+
+            #TODO:
+              # add fw rules to reach the storage accounts from the NOER databricks of the countries
+              # Review the Storage Accounts for data to store the right app registration value
+            
