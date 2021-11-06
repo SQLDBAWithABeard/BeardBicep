@@ -2,6 +2,6 @@ variables:
  rgName: 'Avengers-Infinity-War-uat-rg'
  location: 'uksouth'
  storageAccountName: 'avengersinfinitywaruat'
- storageAccountContainers: 'tonystark, steverogers,thor,brucebanner,natasharomanoff,peterparker,drstrange,tchalla,gamora,nebula,loki' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
+ storageAccountContainers: 'tonystark,steverogers,thor,brucebanner,natasharomanoff,peterparker,drstrange,tchalla,gamora,nebula,loki' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
  rgVirtualNetworksSubnets: 'beardynetwork-uat-rg/beardvnet-uat/Public,beardynetwork-uat-rg/beardvnet-uat/onprem,beardynetwork-uat-rg/beardvnet-uat/internal' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName,RGName/vNetName/subnetName' The vNet/Subnet that will have the Private Endpoints
  peRGVnetSubnet: 'beardynetwork-uat-rg/beardvnet-uat/internal' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName'
