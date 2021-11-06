@@ -36,6 +36,13 @@ param vNetserviceEndpoints array = [
     service: 'Microsoft.Sql'
     locations: 'uksouth'
   }
+  {
+    service: 'Microsoft.Storage'
+    locations: [
+      'uksouth'
+      'ukwest'
+    ]
+  }
 ]
 
 @minLength(1)
