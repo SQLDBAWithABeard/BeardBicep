@@ -83,6 +83,7 @@ module privateendpoint '../Network/PrivateEndpointNoDNS.bicep' = {
     ]
     name: '${storageAccountName}-pe'
     privateLinkServiceId: storageaccount.outputs.storageID
-    subnetid: resourceId('6d8f994c-9051-4cef-ba61-528bab27d213',first(split(peRGVnetSubnet, '/')), 'Microsoft.Network/virtualNetworks/subnets',substring(peRGVnetSubnet, indexOf(peRGVnetSubnet, '/') + 1, (lastIndexOf(peRGVnetSubnet, '/') - indexOf(peRGVnetSubnet, '/')) -1) , last(split(peRGVnetSubnet, '/')))
+    //subnetid: resourceId('6d8f994c-9051-4cef-ba61-528bab27d213',first(split(peRGVnetSubnet, '/')), 'Microsoft.Network/virtualNetworks/subnets',substring(peRGVnetSubnet, indexOf(peRGVnetSubnet, '/') + 1, (lastIndexOf(peRGVnetSubnet, '/') - indexOf(peRGVnetSubnet, '/')) -1) , last(split(peRGVnetSubnet, '/')))
+    subnetid: resourceId('6d8f994c-9051-4cef-ba61-528bab27d213','beardednetwork-rg', 'Microsoft.Network/virtualNetworks/subnets','beardvnet', 'iamgroot')
   }
 }
