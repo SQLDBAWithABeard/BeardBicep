@@ -8,33 +8,24 @@ trigger: none # will disable CI builds (but not PR builds)
 parameters:
 - name: environments
   type: object
-  default: ['dev','uat', 'prod']
-- name: countries
+  default: ['dev'] #,'uat', 'prod']
+- name: films
   type: object
-  default: ['abgl','bxgl','chgl','clgl','cogl','ecgl','frgl','imgl','itgl','ptgl','rugl','skgl','swgl','trgl','ukgl','zgim']
+  default: ['Ant-Man-and-the-Wasp'] 
+  # ['Iron-Man','The-Incredible-Hulk','Iron-Man-2','Thor','Captain-America-The-First-Avenger','Marvels-The-Avengers','Iron-Man-3','Thor-The-Dark-World','Captain-America-The-Winter-Soldier','Guardians-of-the-Galaxy',	'Avengers-Age-of-Ultron','Ant-Man',	'Captain-America-Civil-War','Doctor-Strange',	'Guardians-of-the-Galaxy','Spider-Man-Homecoming','Thor-Ragnarok',	'Black-Panther',	'Avengers-Infinity-War','Ant-Man-and-the-Wasp','Captain-Marvel',	'Avengers-Endgame','Spider-Man-Far-From-Home','Black-Widow',	'Shang-Chi-and-the-Legend-of-the-Ten','Eternals',	'Spider-Man-No-Way-Home','Doctor-Strange-in-the-Multiverse-of-Madness','Thor-Love-and-Thunder',	'Black-Panther-Wakanda-Forever','The-Marvels','Guardians-of-the-Galaxy-Vol-3','Ant-Man-and-the-Wasp-Quantumania','Fantastic-Four']
 
 stages:
-- ${{ each country in parameters.countries }}:
+- ${{ each film in parameters.films }}:
   - ${{ each env in parameters.environments }}:
-    - stage: deploy_${{ country }}_${{ env }}_ResourceGroup
+    - stage: deploy_${{ film }}_${{ env }}_ResourceGroup
       dependsOn: [] 
       variables:          
-        - template: variables/${{ country }}-${{ env }}.yaml
+        - template: variables/${{ film }}-${{ env }}.yaml
       jobs:
-        - template: Templates\ZUGHLU\zughlu2storageAccountsKeyVault.yaml@templates
+        - template: Bicep\myCustomResources\MultipleResourceGroups.bicep
           parameters:
-            environment: ${{ variables.environment }}
-            projectKey: ${{ variables.projectKey }}
-            azureSubscription: ${{ variables.azureSubscription }}
-            testersGroupObjectId: ${{ variables.testersGroupObjectId }} # the objectid for the testers group
-            releaseManagersGroupObjectId: ${{ variables.releaseManagersGroupObjectId }} # // the objectid for the Release Managers group
-            developersGroupObjectId: ${{ variables.developersGroupObjectId }} # // the objectid for the developers group
-            virtualNetworksSubnets: ${{ variables.virtualNetworksSubnets }} #// The VNet and subnets to deploy the resources
-            privateEndpointvirtualNetworkSubnet: ${{ variables.privateEndpointvirtualNetworkSubnet }} #// the VNet and subnet to create the End Point
-            storageaccount1containers: ${{ variables.storageaccount1containers }} # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
-            storageaccount2containers: ${{ variables.storageaccount2containers }} # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
+            rgName: ${{ variables.rgName }}
+            storageAccountName: ${{ variables.storageAccountName }}
+            storageAccountContainers: ${{ variables.storageAccountContainers }}
+            rgVirtualNetworksSubnets: ${{ variables.rgVirtualNetworksSubnets }}
 
-            #TODO:
-              # add fw rules to reach the storage accounts from the NOER databricks of the countries
-              # Review the Storage Accounts for data to store the right app registration value
-            
