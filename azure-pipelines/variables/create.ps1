@@ -7,7 +7,7 @@ foreach ($film in $films) {
         if (-not (Test-Path $filepath)) {
             New-Item $filepath -ItemType File
         }
-        $storageAccountName = '{0}{1}' -f (($film.ToLower()[0..23] -join '') -replace '-', ''), $env
+        $storageAccountName = '{0}{1}' -f (($film.ToLower()[0..21] -join '') -replace '-', ''), $env
         switch ($env) {
             'dev' { 
                 $rgVirtualNetworksSubnets = '{0}/{1}/{2},{0}/{1}/{3},{0}/{1}/{4}' -f 'beardynetwork-dev-rg', 'beardvnet-dev', 'Public', 'onprem', 'internal'
@@ -40,7 +40,7 @@ foreach ($film in $films) {
                 $storageAccountContainers = 'steverogers,nickfury,peggycarter,bucky'
             }
             'Marvels-The-Avengers' { 
-                $storageAccountContainers = 'tonystark, steverogers,natasharomanoff,thor,hulk,loki,pepperpots'
+                $storageAccountContainers = 'tonystark,steverogers,natasharomanoff,thor,hulk,loki,pepperpots'
             }
             'Iron-Man-3' { 
                 $storageAccountContainers = 'tonystark,rhodey,pepperpots,jarvis,aldrichkilian'
@@ -55,7 +55,7 @@ foreach ($film in $films) {
                 $storageAccountContainers = 'starlord,groot,rocket,gamora,drax,ronan,nebula,yondu,collector'
             }
             'Avengers-Age-of-Ultron' { 
-                $storageAccountContainers = 'tonystark, steverogers,thor,brucebanner,natasharomanoff,ultron'
+                $storageAccountContainers = 'tonystark,steverogers,thor,brucebanner,natasharomanoff,ultron'
             }
             'Ant-Man' { 
                 $storageAccountContainers = 'scottlang,hankpym,darrencross,hopevandyne,samwilson,paxton'
@@ -79,7 +79,7 @@ foreach ($film in $films) {
                 $storageAccountContainers = 'tchalla,nakia,okoye,shuri,mbaku'
             }	
             'Avengers-Infinity-War' { 
-                $storageAccountContainers = 'tonystark, steverogers,thor,brucebanner,natasharomanoff,peterparker,drstrange,tchalla,gamora,nebula,loki'
+                $storageAccountContainers = 'tonystark,steverogers,thor,brucebanner,natasharomanoff,peterparker,drstrange,tchalla,gamora,nebula,loki'
             }
             'Ant-Man-and-the-Wasp' { 
                 $storageAccountContainers = 'scottlang,hankpym,janetvandyne,sonny,paxton'
@@ -88,7 +88,7 @@ foreach ($film in $films) {
                 $storageAccountContainers = 'caroldanvers,nickfury,talos,ynrogg,korath'
             }
             'Avengers-Endgame' { 
-                $storageAccountContainers = 'tonystark, steverogers,thor,brucebanner,natasharomanoff,clint,rhodey'
+                $storageAccountContainers = 'tonystark,steverogers,thor,brucebanner,natasharomanoff,clint,rhodey'
             }
             'Spider-Man-Far-From-Home' { 
                 $storageAccountContainers = 'peterparker,tonystark,pepperpots,happy'
