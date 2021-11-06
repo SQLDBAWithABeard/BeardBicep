@@ -90,9 +90,10 @@ stages:
                     try{
                       New-AzDeployment @deploymentConfig 
                     } catch {
+                      $error.Count
                       Write-Warning "We failed to deploy. Error below"
-                      $Error  | Format-List -Property * -Force
-                      $Error.Exception.GetBaseException().Message
+                      $Error  | ForEach-Object {$_ | Format-List -Property * -Force}
+                      $Error  | ForEach-Object {$_.Exception.GetBaseException().Message}
                       Write-Warning "Maybe more information here"
                       (Get-AzDeploymentOperation -DeploymentName $deploymentname).Properties.response | ConvertTo-Json
                       [System.Environment]::Exit(1)
