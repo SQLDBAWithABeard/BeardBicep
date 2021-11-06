@@ -26,6 +26,7 @@ foreach ($film in $films) {
         switch ($film) {
             'Iron-Man' { 
                 $storageAccountContainers = 'tonystark,rhodey,pepperpots,jarvis'
+                $storageAccountName = '{0}1{1}' -f (($film.ToLower()[0..21] -join '') -replace '-', ''), $env
             }
             'The-Incredible-Hulk' { 
                 $storageAccountContainers = 'brucebanner,bettyross,abonimation'
