@@ -24,7 +24,7 @@ stages:
       dependsOn: [] 
       jobs:
         - ${{ each film in parameters.films }}:
-          - job: 'Deploy_Resource_Group'
+          - job:
             displayName: 'Deploy ${{ film }} Resource Group'
             variables:          
               - template: variables/${{ film }}-${{ env }}.yaml
