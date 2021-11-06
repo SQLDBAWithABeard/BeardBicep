@@ -1,7 +1,7 @@
 variables:
- rgName: 'Ant-Man-and-the-Wasp-dev-rg'
+ rgName: 'Thor-Ragnarok-dev-rg'
  location: 'uksouth'
- storageAccountName: 'antmanandthewaspdev'
- storageAccountContainers: 'scottlang,hankpym,janetvandyne,sonny,paxton' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
+ storageAccountName: 'thorragnarokdev'
+ storageAccountContainers: 'thor,odin,loki,heimdall,brucebanner,hela,grandmaster,drstrange' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
  rgVirtualNetworksSubnets: 'beardynetwork-dev-rg/beardvnet-dev/Public,beardynetwork-dev-rg/beardvnet-dev/onprem,beardynetwork-dev-rg/beardvnet-dev/internal' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName,RGName/vNetName/subnetName' The vNet/Subnet that will have the Private Endpoints
  peRGVnetSubnet: 'beardynetwork-dev-rg/beardvnet-dev/internal' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName'

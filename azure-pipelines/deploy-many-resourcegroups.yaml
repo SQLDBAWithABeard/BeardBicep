@@ -7,11 +7,10 @@ trigger: none # will disable CI builds (but not PR builds)
 parameters:
 - name: environments
   type: object
-  default: ['dev','uat'] #,'uat', 'prod']
+  default: ['dev','uat','prod']
 - name: films
   type: object
-  default: ['Ant-Man-and-the-Wasp'] 
-  # ['Iron-Man','The-Incredible-Hulk','Iron-Man-2','Thor','Captain-America-The-First-Avenger','Marvels-The-Avengers','Iron-Man-3','Thor-The-Dark-World','Captain-America-The-Winter-Soldier','Guardians-of-the-Galaxy',	'Avengers-Age-of-Ultron','Ant-Man',	'Captain-America-Civil-War','Doctor-Strange',	'Guardians-of-the-Galaxy','Spider-Man-Homecoming','Thor-Ragnarok',	'Black-Panther',	'Avengers-Infinity-War','Ant-Man-and-the-Wasp','Captain-Marvel',	'Avengers-Endgame','Spider-Man-Far-From-Home','Black-Widow',	'Shang-Chi-and-the-Legend-of-the-Ten','Eternals',	'Spider-Man-No-Way-Home','Doctor-Strange-in-the-Multiverse-of-Madness','Thor-Love-and-Thunder',	'Black-Panther-Wakanda-Forever','The-Marvels','Guardians-of-the-Galaxy-Vol-3','Ant-Man-and-the-Wasp-Quantumania','Fantastic-Four']
+  default: ['Iron-Man','The-Incredible-Hulk','Iron-Man-2','Thor','Captain-America-The-First-Avenger','Marvels-The-Avengers','Iron-Man-3','Thor-The-Dark-World','Captain-America-The-Winter-Soldier','Guardians-of-the-Galaxy', 'Avengers-Age-of-Ultron','Ant-Man', 'Captain-America-Civil-War','Doctor-Strange', 'Guardians-of-the-Galaxy-2','Spider-Man-Homecoming','Thor-Ragnarok', 'Black-Panther','Avengers-Infinity-War','Ant-Man-and-the-Wasp','Captain-Marvel','Avengers-Endgame','Spider-Man-Far-From-Home','Black-Widow']
 - name: azureSubscription
   type: string
   default: beards-service-connection

@@ -1,0 +1,578 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1008.15138",
+      "templateHash": "16655809864455228002"
+    }
+  },
+  "parameters": {
+    "rgName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Resource Group"
+      },
+      "maxLength": 90,
+      "minLength": 1
+    },
+    "rgLocation": {
+      "type": "string",
+      "defaultValue": "uksouth"
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the storage account -3-24\tLowercase letters and numbers."
+      },
+      "maxLength": 24,
+      "minLength": 3
+    },
+    "storageAccountContainers": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "an array of container names"
+      }
+    },
+    "rgVirtualNetworksSubnets": {
+      "type": "array",
+      "metadata": {
+        "description": "An array of allowed ResourceGroup/VirtualNetwork/Subnet for access to the storage account"
+      }
+    },
+    "peRGVnetSubnet": {
+      "type": "string",
+      "metadata": {
+        "description": "ResourceGroup/VirtualNetwork/Subnet for the Private Endpoint"
+      }
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('deploy-{0}', parameters('rgName'))]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('rgLocation')]"
+          },
+          "name": {
+            "value": "[parameters('rgName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "7639245763100667461"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the Resource Group"
+              },
+              "maxLength": 90,
+              "minLength": 1
+            },
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "The location that the resource should be created"
+              }
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {},
+              "metadata": {
+                "description": "The tags that should be added to the resource"
+              }
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2021-04-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]"
+            }
+          ],
+          "outputs": {
+            "resourceGroupName": {
+              "type": "string",
+              "value": "[parameters('name')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('storageaccount{0}-deploy', parameters('storageAccountName'))]",
+      "resourceGroup": "[parameters('rgName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "rgVirtualNetworksSubnets": {
+            "value": "[parameters('rgVirtualNetworksSubnets')]"
+          },
+          "isHnsEnabled": {
+            "value": true
+          },
+          "networkAclsBypass": {
+            "value": "AzureServices"
+          },
+          "skuName": {
+            "value": "Standard_LRS"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "11510208110736236288"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the storage account -3-24\tLowercase letters and numbers."
+              },
+              "maxLength": 24,
+              "minLength": 3
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "The location - uses the resource group location by default"
+              }
+            },
+            "skuName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the sku for the storage account"
+              },
+              "allowedValues": [
+                "Premium_LRS",
+                "Premium_ZRS",
+                "Standard_GRS",
+                "Standard_GZRS",
+                "Standard_LRS",
+                "Standard_RAGRS",
+                "Standard_RAGZRS",
+                "Standard_ZRS"
+              ]
+            },
+            "isHnsEnabled": {
+              "type": "bool",
+              "metadata": {
+                "description": "Account HierarchicalNamespace enabled - This allows the collection of objects/files within an account to be organized into a hierarchy of directories and nested subdirectories in the same way that the file system on your computer is organized. With a hierarchical namespace enabled, a storage account becomes capable of providing the scalability and cost-effectiveness of object storage, with file system semantics that are familiar to analytics engines and frameworks"
+              }
+            },
+            "supportsHttpsTrafficOnly": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Allows https traffic only to storage service"
+              }
+            },
+            "allowSharedKeyAccess": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "ndicates whether the storage account permits requests to be authorized with the account access key via Shared Key. If false, then all requests, including shared access signatures, must be authorized with Azure Active Directory (Azure AD"
+              }
+            },
+            "minimumTlsVersion": {
+              "type": "string",
+              "defaultValue": "TLS1_2",
+              "metadata": {
+                "description": "Set the minimum TLS version to be permitted on requests to storage"
+              },
+              "allowedValues": [
+                "TLS1_0",
+                "TLS1_1",
+                "TLS1_2"
+              ]
+            },
+            "networkAclsBypass": {
+              "type": "string",
+              "metadata": {
+                "description": "Specifies whether traffic is bypassed for Logging/Metrics/AzureServices. Possible values are any combination of Logging|Metrics|AzureServices (For example, \"Logging, Metrics\"), or None to bypass none of those traffics."
+              },
+              "allowedValues": [
+                "AzureServices",
+                "Logging",
+                "Metrics",
+                "None"
+              ]
+            },
+            "rgVirtualNetworksSubnets": {
+              "type": "array",
+              "metadata": {
+                "description": "An array of allowed ResourceGroup/VirtualNetwork/Subnet for access to the storage account"
+              }
+            },
+            "defaultAction": {
+              "type": "string",
+              "defaultValue": "Deny",
+              "metadata": {
+                "description": "Specifies the default action of allow or deny when no other rules match."
+              },
+              "allowedValues": [
+                "Allow",
+                "Deny"
+              ]
+            },
+            "accessTier": {
+              "type": "string",
+              "defaultValue": "Hot",
+              "metadata": {
+                "description": "The access tier used for billing"
+              },
+              "allowedValues": [
+                "Cool",
+                "Hot"
+              ]
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            }
+          },
+          "functions": [],
+          "variables": {
+            "copy": [
+              {
+                "name": "virtualNetworkRules",
+                "count": "[length(parameters('rgVirtualNetworksSubnets'))]",
+                "input": {
+                  "id": "[resourceId(subscription().subscriptionId, first(split(parameters('rgVirtualNetworksSubnets')[copyIndex('virtualNetworkRules')], '/')), 'Microsoft.Network/virtualNetworks/subnets', substring(parameters('rgVirtualNetworksSubnets')[copyIndex('virtualNetworkRules')], add(indexOf(parameters('rgVirtualNetworksSubnets')[copyIndex('virtualNetworkRules')], '/'), 1), sub(sub(lastIndexOf(parameters('rgVirtualNetworksSubnets')[copyIndex('virtualNetworkRules')], '/'), indexOf(parameters('rgVirtualNetworksSubnets')[copyIndex('virtualNetworkRules')], '/')), 1)), last(split(parameters('rgVirtualNetworksSubnets')[copyIndex('virtualNetworkRules')], '/')))]",
+                  "action": "Allow"
+                }
+              }
+            ]
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2021-02-01",
+              "name": "[parameters('name')]",
+              "location": "[if(not(empty(parameters('location'))), parameters('location'), resourceGroup().location)]",
+              "sku": {
+                "name": "[parameters('skuName')]"
+              },
+              "kind": "StorageV2",
+              "properties": {
+                "isHnsEnabled": "[parameters('isHnsEnabled')]",
+                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]",
+                "allowBlobPublicAccess": true,
+                "allowSharedKeyAccess": "[parameters('allowSharedKeyAccess')]",
+                "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
+                "networkAcls": {
+                  "bypass": "[parameters('networkAclsBypass')]",
+                  "virtualNetworkRules": "[variables('virtualNetworkRules')]",
+                  "defaultAction": "[parameters('defaultAction')]"
+                },
+                "accessTier": "[parameters('accessTier')]"
+              },
+              "tags": "[parameters('tags')]"
+            }
+          ],
+          "outputs": {
+            "storageID": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
+            },
+            "storagePrimaryEndpoints": {
+              "type": "object",
+              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('name'))).primaryEndpoints]"
+            },
+            "storagePrimaryKey": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('name')), '2021-02-01').keys[0].value]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('deploy-{0}', parameters('rgName')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('storagekey-to-kv-{0}', parameters('storageAccountName'))]",
+      "resourceGroup": "PassBeard-Admin",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "contentType": {
+            "value": "[format('The storage primary key for {0} in {1}', parameters('storageAccountName'), parameters('rgName'))]"
+          },
+          "name": {
+            "value": "[format('{0}/{1}-{2}-key', 'passbeard-kv', parameters('rgName'), parameters('storageAccountName'))]"
+          },
+          "value": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', format('storageaccount{0}-deploy', parameters('storageAccountName'))), '2020-06-01').outputs.storagePrimaryKey.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "2267080613747515237"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the secret - between 1 and 127 alphanumeric characters and hyphens"
+              },
+              "maxLength": 127,
+              "minLength": 1
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {},
+              "metadata": {
+                "description": "The tags for the resource"
+              }
+            },
+            "contentType": {
+              "type": "string",
+              "metadata": {
+                "description": "The content type of the secret."
+              }
+            },
+            "value": {
+              "type": "secureString"
+            },
+            "enabled": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Determines whether the object is enabled. default true"
+              }
+            },
+            "expiry": {
+              "type": "int",
+              "defaultValue": 0,
+              "metadata": {
+                "description": "Expiry date in seconds since 1970-01-01T00:00:00Z. No default"
+              }
+            },
+            "notBefore": {
+              "type": "int",
+              "defaultValue": 0,
+              "metadata": {
+                "description": "Not before date in seconds since 1970-01-01T00:00:00Z. No default"
+              }
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2021-06-01-preview",
+              "name": "[parameters('name')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "contentType": "[parameters('contentType')]",
+                "value": "[parameters('value')]",
+                "attributes": {
+                  "enabled": "[parameters('enabled')]",
+                  "exp": "[if(equals(parameters('expiry'), 0), null(), parameters('expiry'))]",
+                  "nbf": "[if(equals(parameters('notBefore'), 0), null(), parameters('notBefore'))]"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', format('storageaccount{0}-deploy', parameters('storageAccountName')))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "container",
+        "count": "[length(parameters('storageAccountContainers'))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('{0}-deploy', parameters('storageAccountContainers')[copyIndex()])]",
+      "resourceGroup": "[parameters('rgName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "parent": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "containerName": {
+            "value": "[parameters('storageAccountContainers')[copyIndex()]]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "6848943437459490583"
+            }
+          },
+          "parameters": {
+            "containerName": {
+              "type": "string"
+            },
+            "parent": {
+              "type": "string"
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}/default/{1}', parameters('parent'), parameters('containerName'))]",
+              "properties": {
+                "publicAccess": "None",
+                "metadata": {}
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', format('storageaccount{0}-deploy', parameters('storageAccountName')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('{0}-pe-deploy', parameters('storageAccountName'))]",
+      "resourceGroup": "[parameters('rgName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "groupIds": {
+            "value": [
+              "blob"
+            ]
+          },
+          "name": {
+            "value": "[format('{0}-pe', parameters('storageAccountName'))]"
+          },
+          "privateLinkServiceId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', format('storageaccount{0}-deploy', parameters('storageAccountName'))), '2020-06-01').outputs.storageID.value]"
+          },
+          "subnetid": {
+            "value": "[resourceId(subscription().subscriptionId, first(split(parameters('peRGVnetSubnet'), '/')), 'Microsoft.Network/virtualNetworks/subnets', substring(parameters('peRGVnetSubnet'), add(indexOf(parameters('peRGVnetSubnet'), '/'), 1), sub(sub(lastIndexOf(parameters('peRGVnetSubnet'), '/'), indexOf(parameters('peRGVnetSubnet'), '/')), 1)), last(split(parameters('peRGVnetSubnet'), '/')))]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "3329836645333404895"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": ""
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            },
+            "subnetid": {
+              "type": "string"
+            },
+            "privateLinkServiceId": {
+              "type": "string"
+            },
+            "groupIds": {
+              "type": "array"
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Network/privateEndpoints",
+              "apiVersion": "2020-07-01",
+              "name": "[parameters('name')]",
+              "location": "[if(equals(parameters('location'), ''), resourceGroup().location, parameters('location'))]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "subnet": {
+                  "id": "[parameters('subnetid')]"
+                },
+                "privateLinkServiceConnections": [
+                  {
+                    "properties": {
+                      "privateLinkServiceId": "[parameters('privateLinkServiceId')]",
+                      "groupIds": "[parameters('groupIds')]"
+                    },
+                    "name": "[parameters('name')]"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', format('storageaccount{0}-deploy', parameters('storageAccountName')))]"
+      ]
+    }
+  ]
+}
