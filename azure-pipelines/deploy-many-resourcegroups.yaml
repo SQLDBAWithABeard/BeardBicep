@@ -7,7 +7,7 @@ trigger: none # will disable CI builds (but not PR builds)
 parameters:
 - name: environments
   type: object
-  default: ['dev'] #,'uat', 'prod']
+  default: ['dev','uat'] #,'uat', 'prod']
 - name: films
   type: object
   default: ['Ant-Man-and-the-Wasp'] 
@@ -15,6 +15,9 @@ parameters:
 - name: azureSubscription
   type: string
   default: beards-service-connection
+- name: whatIf
+  type: boolean
+  default: false
 
 stages:
   - ${{ each env in parameters.environments }}:
@@ -40,6 +43,13 @@ stages:
                  $date = Get-Date -Format yyyyMMddHHmmsss
                  $deploymentname = 'Deploy_RG_{0}' -f $date # name of the deployment seen in the activity log
                  Write-Host "Deployment name is $deploymentname"
+
+                 $WhatIfParam = '${{ parameters.whatIf }}'
+                 if($WhatIfParam -eq 'false'){
+                   $WhatIf = $false
+                 }else{
+                   $WhatIf = $true
+                 }
 
                   # array params - these are passed in as 'string','string','string'
                   $rgVirtualNetworksSubnetsString = '${{ variables.rgVirtualNetworksSubnets }}'
