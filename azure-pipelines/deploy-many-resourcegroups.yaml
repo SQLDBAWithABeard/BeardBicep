@@ -22,7 +22,7 @@ stages:
       variables:          
         - template: variables/${{ film }}-${{ env }}.yaml
       jobs:
-        - template: Bicep\myCustomResources\MultipleResourceGroups.bicep
+        - template: ..\Bicep\myCustomResources\MultipleResourceGroups.bicep
           parameters:
             rgName: ${{ variables.rgName }}
             storageAccountName: ${{ variables.storageAccountName }}
