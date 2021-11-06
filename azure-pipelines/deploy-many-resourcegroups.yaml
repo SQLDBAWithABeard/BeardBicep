@@ -42,13 +42,13 @@ stages:
                  Write-Host "Deployment name is $deploymentname"
 
                   # array params - these are passed in as 'string','string','string'
-                  $rgVirtualNetworksSubnetsString = '${{ parameters.rgVirtualNetworksSubnets }}'
+                  $rgVirtualNetworksSubnetsString = '${{ variables.rgVirtualNetworksSubnets }}'
                   if($rgVirtualNetworksSubnetsString -ne 'null'){
                   $rgVirtualNetworksSubnetsArray = $rgVirtualNetworksSubnetsString.Split(',')
                   } else {
                    $rgVirtualNetworksSubnetsArray = @()
                   }
-                  $storageAccountContainersString = '${{ parameters.storageAccountContainers }}'
+                  $storageAccountContainersString = '${{ variables.storageAccountContainers }}'
                   if($storageAccountContainersString -ne 'null'){
                   $storageAccountContainersArray = $storageAccountContainersString.Split(',')
                   } else {
