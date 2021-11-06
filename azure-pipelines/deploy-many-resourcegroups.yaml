@@ -40,6 +40,14 @@ stages:
                  $date = Get-Date -Format yyyyMMddHHmmsss
                  $deploymentname = 'Deploy_RG_{0}' -f $date # name of the deployment seen in the activity log
                  Write-Host "Deployment name is $deploymentname"
+
+                  # array params - these are passed in as 'string','string','string'
+                  $rgVirtualNetworksSubnetsString = '${{ parameters.rgVirtualNetworksSubnets }}'
+                  if($rgVirtualNetworksSubnetsString -ne 'null'){
+                  $rgVirtualNetworksSubnetsArray = $rgVirtualNetworksSubnetsString.Split(',')
+                  } else {
+                   $rgVirtualNetworksSubnetsArray = @()
+                  }
                
                  $templateFile = 'Bicep\myCustomResources\MultipleResourceGroups.bicep' 
                   if(Test-Path $templateFile){
@@ -57,7 +65,7 @@ stages:
                         rgName                                  = '${{ variables.rgName }}'
                         storageAccountName                      = '${{ variables.storageAccountName }}'
                         storageAccountContainers                = '${{ variables.storageAccountContainers }}'
-                        rgVirtualNetworksSubnets                = '${{ variables.rgVirtualNetworksSubnets }}'
+                        rgVirtualNetworksSubnets                = $rgVirtualNetworksSubnetsArray
                         peRGVnetSubnet                          = '${{ variables.peRGVnetSubnet }}'
                     }
                     $message = "We are deploying with - {0} " -f ($deploymentConfig | Out-String)
