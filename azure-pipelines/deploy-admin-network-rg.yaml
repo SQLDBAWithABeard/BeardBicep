@@ -68,7 +68,7 @@ jobs:
            Write-Host "What If is set to $WhatIf"
 
            $date = Get-Date -Format yyyyMMddHHmmsss
-           $deploymentname = 'Deploy_DevNetwork_{0}}'  $date # name of the deployment seen in the activity log
+           $deploymentname = 'Deploy_DevNetwork_{0}' -f $date # name of the deployment seen in the activity log
            Write-Host "Deployment name is $deploymentname"
 
            $templateFile = 'Bicep\myCustomResources\AdminNetworkRG.bicep' 
