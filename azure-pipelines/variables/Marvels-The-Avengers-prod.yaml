@@ -4,4 +4,4 @@ variables:
  storageAccountName: 'marvelstheavengersprod'
  storageAccountContainers: 'tonystark,steverogers,natasharomanoff,thor,hulk,loki,pepperpots' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
  rgVirtualNetworksSubnets: 'beardednetwork-rg/beardvnet/Public,beardednetwork-rg/beardvnet/onprem,beardednetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName,RGName/vNetName/subnetName' The vNet/Subnet that will have the Private Endpoints
- peRGVnetSubnet: 'beardednetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName'
+ peRGVnetSubnet: 'beardynetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName'
