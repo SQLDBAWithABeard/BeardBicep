@@ -19,7 +19,7 @@ foreach ($film in $films) {
             }
             'prod' { 
                 $rgVirtualNetworksSubnets = '{0}/{1}/{2},{0}/{1}/{3},{0}/{1}/{4}' -f 'beardednetwork-rg', 'beardvnet', 'Public', 'onprem', 'iamgroot'
-                $peRGVnetSubnet = '{0}/{1}/{2}' -f 'beardednetwork-rg', 'beardvnet', 'iamgroot'
+                $peRGVnetSubnet = '{0}/{1}/{2}' -f 'beardynetwork-rg', 'beardvnet', 'iamgroot'
             }
             
         }
