@@ -25,6 +25,7 @@ stages:
         - ${{ each film in parameters.films }}:
           - job:
             displayName: 'Deploy ${{ film }} Resource Group'
+            dependsOn: []
             variables:          
               - template: variables/${{ film }}-${{ env }}.yaml
             pool:
