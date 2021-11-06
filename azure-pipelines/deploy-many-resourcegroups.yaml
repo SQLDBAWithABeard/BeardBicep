@@ -21,7 +21,7 @@ parameters:
 
 stages:
   - ${{ each env in parameters.environments }}:
-    - stage: deploy_films_${{ env }}_ResourceGroup
+    - stage: Deploy_${{ env }}_Films_ResourceGroups
       dependsOn: [] 
       jobs:
         - ${{ each film in parameters.films }}:
