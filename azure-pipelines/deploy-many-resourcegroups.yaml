@@ -48,6 +48,12 @@ stages:
                   } else {
                    $rgVirtualNetworksSubnetsArray = @()
                   }
+                  $storageAccountContainersString = '${{ parameters.storageAccountContainers }}'
+                  if($storageAccountContainersString -ne 'null'){
+                  $storageAccountContainersArray = $storageAccountContainersString.Split(',')
+                  } else {
+                   $storageAccountContainersArray = @()
+                  }
                
                  $templateFile = 'Bicep\myCustomResources\MultipleResourceGroups.bicep' 
                   if(Test-Path $templateFile){
@@ -64,7 +70,7 @@ stages:
                         WhatIf                                  = $WhatIf 
                         rgName                                  = '${{ variables.rgName }}'
                         storageAccountName                      = '${{ variables.storageAccountName }}'
-                        storageAccountContainers                = '${{ variables.storageAccountContainers }}'
+                        storageAccountContainers                = $storageAccountContainersArray
                         rgVirtualNetworksSubnets                = $rgVirtualNetworksSubnetsArray
                         peRGVnetSubnet                          = '${{ variables.peRGVnetSubnet }}'
                     }
