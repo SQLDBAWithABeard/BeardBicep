@@ -69,6 +69,7 @@ foreach ($film in $films) {
             }
             'Guardians-of-the-Galaxy-2' { 
                 $storageAccountContainers = 'starlord,babygroot,rocket,gamora,drax,nebula,yondu,ego,mantis,taserface'
+                $storageAccountName = '{0}2{1}' -f (($film.ToLower()[0..20] -join '') -replace '-', ''), $env
             }
             'Spider-Man-Homecoming' { 
                 $storageAccountContainers = 'peterparker,tonystark,pepperpots,happy'
