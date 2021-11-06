@@ -43,6 +43,8 @@ stages:
                  $date = Get-Date -Format yyyyMMddHHmmsss
                  $deploymentname = 'Deploy_RG_{0}' -f $date # name of the deployment seen in the activity log
                  Write-Host "Deployment name is $deploymentname"
+                 $resourcegroupname = '${{ variables.rgName }}'
+                 Write-Host "We will deploy to the $resourcegroupname resource group"
 
                  $WhatIfParam = '${{ parameters.whatIf }}'
                  if($WhatIfParam -eq 'false'){

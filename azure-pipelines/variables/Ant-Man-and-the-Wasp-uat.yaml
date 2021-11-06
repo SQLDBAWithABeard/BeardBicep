@@ -1,5 +1,5 @@
 variables:
- rgName: 'Ant-Man-and-the-Wasp-rg'
+ rgName: 'Ant-Man-and-the-Wasp-uat-rg'
  location: 'uksouth'
  storageAccountName: 'antmanandthewaspuat'
  storageAccountContainers: 'antman,wasp' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
