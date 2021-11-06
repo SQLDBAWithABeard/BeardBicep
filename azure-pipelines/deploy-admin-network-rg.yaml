@@ -3,7 +3,7 @@
 # it will deploy the resource group, 3 virtual network, 9 subnets, and 3 NSG
 
 trigger: none # will disable CI builds (but not PR builds)
-
+name: 'Deploy_The_Networks_and_NSGs'
 parameters:
  - name: azureSubscription
    type: string
@@ -22,7 +22,8 @@ parameters:
    default: nothing
 
 jobs:
-  - job: 'Deploy_Dev_Network'
+  - job: 'Deploy_Dev_Network_and_NSG'
+    displayName: 'Deploy Dev Network and NSG'
     variables: 
       vNetName: beardvnet-dev
       vNetaddressPrefixes: '10.0.0.0/16'
@@ -37,7 +38,7 @@ jobs:
     - checkout: self
       persistCredentials: true
     - task: AzurePowerShell@5
-      displayName: Deploy Resource
+      displayName: Deploy The Bicep
       inputs:
         azureSubscription: ${{ parameters.azureSubscription }}
         ScriptType: 'InlineScript'
@@ -64,6 +65,146 @@ jobs:
            ## } else {
            ##  $virtualNetworksSubnetsArray = @()
            ## }
+
+           Write-Host "What If is set to $WhatIf"
+
+           $date = Get-Date -Format yyyyMMddHHmmsss
+           $deploymentname = 'Deploy_DevNetwork_{0}' -f $date # name of the deployment seen in the activity log
+           Write-Host "Deployment name is $deploymentname"
+
+           $templateFile = 'Bicep\myCustomResources\AdminNetworkRG.bicep' 
+            if(Test-Path $templateFile){
+              Write-Host "We have the template file $templateFile"
+            }  else {
+                Write-Warning "Can't deploy without the templatefile $templateFile"
+                [System.Environment]::Exit(1)
+              }
+
+            $deploymentConfig = @{
+                  Name                                    = $deploymentname
+                  TemplateFile                            = $templateFile
+                  location                                = '${{ parameters.location }}'
+                  WhatIf                                  = $WhatIf 
+                  vNetName                                = '$(vNetName)'
+                  vNetaddressPrefixes                     = '$(vNetaddressPrefixes)'
+                  subnet1Name                             = '$(subnet1Name)'
+                  subnet1addressPrefix                    = '$(subnet1addressPrefix)'
+                  subnet2Name                             = '$(subnet2Name)'
+                  subnet2addressPrefix                    = '$(subnet2addressPrefix)'
+                  nsgName                                 = '$(nsgName)'
+              }
+              $message = "We are deploying with - {0} " -f ($deploymentConfig | Out-String)
+              Write-Host $message
+              try{
+                New-AzDeployment @deploymentConfig 
+              } catch {
+                Write-Warning "We failed to deploy. Error below"
+                $_  | Format-List -Property * -Force
+                Write-Warning "Maybe more information here"
+                (Get-AzDeploymentOperation -DeploymentName $deploymentname).Properties.response | ConvertTo-Json
+                [System.Environment]::Exit(1)
+              }
+        azurePowerShellVersion: '6.3.0'
+      env:
+        SYSTEM_ACCESSTOKEN: $(system.accesstoken)
+        pwsh: true
+  - job: 'Deploy_UAT_Network_and_NSG'
+    displayName: 'Deploy UAT Network and NSG'
+    variables: 
+      vNetName: beardvnet-uat
+      vNetaddressPrefixes: '10.0.0.0/16'
+      subnet1Name: onprem
+      subnet1addressPrefix: '10.0.2.0/24'
+      subnet2Name: internal
+      subnet2addressPrefix: '10.0.3.0/24'
+      nsgName: blacknight
+    pool:
+      vmImage: windows-latest
+    steps:
+    - checkout: self
+      persistCredentials: true
+    - task: AzurePowerShell@5
+      displayName: Deploy The Bicep
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        ScriptType: 'InlineScript'
+        Inline: |
+           $WhatIfParam = '${{ parameters.whatIf }}'
+           if($WhatIfParam -eq 'false'){
+             $WhatIf = $false
+           }else{
+             $WhatIf = $true
+           }
+
+           Write-Host "What If is set to $WhatIf"
+
+           $date = Get-Date -Format yyyyMMddHHmmsss
+           $deploymentname = 'Deploy_DevNetwork_{0}' -f $date # name of the deployment seen in the activity log
+           Write-Host "Deployment name is $deploymentname"
+
+           $templateFile = 'Bicep\myCustomResources\AdminNetworkRG.bicep' 
+            if(Test-Path $templateFile){
+              Write-Host "We have the template file $templateFile"
+            }  else {
+                Write-Warning "Can't deploy without the templatefile $templateFile"
+                [System.Environment]::Exit(1)
+              }
+
+            $deploymentConfig = @{
+                  Name                                    = $deploymentname
+                  TemplateFile                            = $templateFile
+                  location                                = '${{ parameters.location }}'
+                  WhatIf                                  = $WhatIf 
+                  vNetName                                = '$(vNetName)'
+                  vNetaddressPrefixes                     = '$(vNetaddressPrefixes)'
+                  subnet1Name                             = '$(subnet1Name)'
+                  subnet1addressPrefix                    = '$(subnet1addressPrefix)'
+                  subnet2Name                             = '$(subnet2Name)'
+                  subnet2addressPrefix                    = '$(subnet2addressPrefix)'
+                  nsgName                                 = '$(nsgName)'
+              }
+              $message = "We are deploying with - {0} " -f ($deploymentConfig | Out-String)
+              Write-Host $message
+              try{
+                New-AzDeployment @deploymentConfig 
+              } catch {
+                Write-Warning "We failed to deploy. Error below"
+                $_  | Format-List -Property * -Force
+                Write-Warning "Maybe more information here"
+                (Get-AzDeploymentOperation -DeploymentName $deploymentname).Properties.response | ConvertTo-Json
+                [System.Environment]::Exit(1)
+              }
+        azurePowerShellVersion: '6.3.0'
+      env:
+        SYSTEM_ACCESSTOKEN: $(system.accesstoken)
+        pwsh: true
+  - job: 'Deploy_Prod_Network_and_NSG'
+    displayName: 'Deploy Prod Network and NSG'
+    variables: 
+      vNetName: beardvnet-uat
+      vNetaddressPrefixes: '10.0.0.0/16'
+      subnet1Name: onprem
+      subnet1addressPrefix: '10.0.2.0/24'
+      subnet2Name: iamgroot
+      subnet2addressPrefix: '10.0.3.0/24'
+      nsgName: guardiansofthegalaxy
+    pool:
+      vmImage: windows-latest
+    steps:
+    - checkout: self
+      persistCredentials: true
+    - task: AzurePowerShell@5
+      displayName: Deploy The Bicep
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        ScriptType: 'InlineScript'
+        Inline: |
+           $WhatIfParam = '${{ parameters.whatIf }}'
+           if($WhatIfParam -eq 'false'){
+             $WhatIf = $false
+           }else{
+             $WhatIf = $true
+           }
 
            Write-Host "What If is set to $WhatIf"
 
