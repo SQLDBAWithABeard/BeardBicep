@@ -91,8 +91,8 @@ stages:
                       New-AzDeployment @deploymentConfig 
                     } catch {
                       Write-Warning "We failed to deploy. Error below"
-                      $_  | Format-List -Property * -Force
-                      $_.Exception.GetBaseException()
+                      $Error  | Format-List -Property * -Force
+                      $Error.Exception.GetBaseException().Message
                       Write-Warning "Maybe more information here"
                       (Get-AzDeploymentOperation -DeploymentName $deploymentname).Properties.response | ConvertTo-Json
                       [System.Environment]::Exit(1)
