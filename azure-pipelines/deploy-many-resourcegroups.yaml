@@ -15,26 +15,26 @@ parameters:
   # ['Iron-Man','The-Incredible-Hulk','Iron-Man-2','Thor','Captain-America-The-First-Avenger','Marvels-The-Avengers','Iron-Man-3','Thor-The-Dark-World','Captain-America-The-Winter-Soldier','Guardians-of-the-Galaxy',	'Avengers-Age-of-Ultron','Ant-Man',	'Captain-America-Civil-War','Doctor-Strange',	'Guardians-of-the-Galaxy','Spider-Man-Homecoming','Thor-Ragnarok',	'Black-Panther',	'Avengers-Infinity-War','Ant-Man-and-the-Wasp','Captain-Marvel',	'Avengers-Endgame','Spider-Man-Far-From-Home','Black-Widow',	'Shang-Chi-and-the-Legend-of-the-Ten','Eternals',	'Spider-Man-No-Way-Home','Doctor-Strange-in-the-Multiverse-of-Madness','Thor-Love-and-Thunder',	'Black-Panther-Wakanda-Forever','The-Marvels','Guardians-of-the-Galaxy-Vol-3','Ant-Man-and-the-Wasp-Quantumania','Fantastic-Four']
 
 stages:
-- ${{ each film in parameters.films }}:
   - ${{ each env in parameters.environments }}:
-    - stage: deploy_${{ film }}_${{ env }}_ResourceGroup
+    - stage: deploy_films_${{ env }}_ResourceGroup
       dependsOn: [] 
       variables:          
         - template: variables/${{ film }}-${{ env }}.yaml
       jobs:
-        - job: 'Deploy_Resource_Group'
-          displayName: 'Deploy Prod Network and NSG'
-          pool:
-            vmImage: windows-latest
-          steps:
-          - checkout: self
-            persistCredentials: true
-          - task: AzurePowerShell@5
-            displayName: Deploy The Bicep
-            inputs:
-              azureSubscription: ${{ parameters.azureSubscription }}
-              ScriptType: 'InlineScript'
-              Inline: |
+        - ${{ each film in parameters.films }}:
+          - job: 'Deploy_Resource_Group'
+            displayName: 'Deploy ${{ film }} Resource Group'
+            pool:
+              vmImage: windows-latest
+            steps:
+            - checkout: self
+              persistCredentials: true
+            - task: AzurePowerShell@5
+              displayName: Deploy The Bicep
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                ScriptType: 'InlineScript'
+                Inline: |
                  $date = Get-Date -Format yyyyMMddHHmmsss
                  $deploymentname = 'Deploy_RG_{0}' -f $date # name of the deployment seen in the activity log
                  Write-Host "Deployment name is $deploymentname"
@@ -69,8 +69,8 @@ stages:
                       (Get-AzDeploymentOperation -DeploymentName $deploymentname).Properties.response | ConvertTo-Json
                       [System.Environment]::Exit(1)
                     }
-              azurePowerShellVersion: '6.3.0'
-            env:
-              SYSTEM_ACCESSTOKEN: $(system.accesstoken)
-              pwsh: true
+                azurePowerShellVersion: '6.3.0'
+              env:
+                SYSTEM_ACCESSTOKEN: $(system.accesstoken)
+                pwsh: true
 
