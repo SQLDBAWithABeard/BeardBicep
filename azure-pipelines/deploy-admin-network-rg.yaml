@@ -88,8 +88,8 @@ jobs:
                   vNetaddressPrefixes                     = $(vNetaddressPrefixes)
                   subnet1Name                             = $(subnet1Name)
                   subnet1addressPrefix                    = $(subnet1addressPrefix)
-                  subnet1Name                             = $(subnet1Name)
-                  subnet1addressPrefix                    = $(subnet1addressPrefix)
+                  subnet2Name                             = $(subnet2Name)
+                  subnet2addressPrefix                    = $(subnet2addressPrefix)
                   nsgName                                 = $(nsgName)
               }
               $message = "We are deploying with - {0} " -f ($deploymentConfig | Out-String)
