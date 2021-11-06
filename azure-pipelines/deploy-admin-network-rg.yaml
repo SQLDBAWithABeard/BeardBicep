@@ -25,6 +25,7 @@ jobs:
   - job: 'Deploy_Dev_Network_and_NSG'
     displayName: 'Deploy Dev Network and NSG'
     variables: 
+      rgName: beardynetwork-dev-rg
       vNetName: beardvnet-dev
       vNetaddressPrefixes: '10.0.0.0/16'
       subnet1Name: onprem
@@ -111,6 +112,7 @@ jobs:
   - job: 'Deploy_UAT_Network_and_NSG'
     displayName: 'Deploy UAT Network and NSG'
     variables: 
+      rgName: beardynetwork-uat-rg
       vNetName: beardvnet-uat
       vNetaddressPrefixes: '10.0.0.0/16'
       subnet1Name: onprem
@@ -181,7 +183,8 @@ jobs:
   - job: 'Deploy_Prod_Network_and_NSG'
     displayName: 'Deploy Prod Network and NSG'
     variables: 
-      vNetName: beardvnet-uat
+      rgName: beardynetwork-rg
+      vNetName: beardvnet
       vNetaddressPrefixes: '10.0.0.0/16'
       subnet1Name: onprem
       subnet1addressPrefix: '10.0.2.0/24'
