@@ -45,7 +45,7 @@ param networkAclsBypass string
 @description('An array of allowed ResourceGroup/VirtualNetwork/Subnet for access to the storage account')
 param rgVirtualNetworksSubnets array
 var virtualNetworkRules = [for allowed in rgVirtualNetworksSubnets: {
-  id: resourceId(first(split(allowed, '/')), 'Microsoft.Network/virtualNetworks/subnets',substring(allowed, indexOf(allowed, '/') + 1, (lastIndexOf(allowed, '/') - indexOf(allowed, '/')) -1) , last(split(allowed, '/')))
+  id: resourceId(subscription().id,first(split(allowed, '/')), 'Microsoft.Network/virtualNetworks/subnets',substring(allowed, indexOf(allowed, '/') + 1, (lastIndexOf(allowed, '/') - indexOf(allowed, '/')) -1) , last(split(allowed, '/')))
   action: 'Allow'
 }]
 @allowed([
@@ -78,7 +78,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
 
     networkAcls: {
       bypass: networkAclsBypass
-      // virtualNetworkRules: virtualNetworkRules
+      virtualNetworkRules: virtualNetworkRules
       defaultAction: defaultAction
     }
     accessTier: accessTier
