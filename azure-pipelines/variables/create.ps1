@@ -18,7 +18,7 @@ foreach ($film in $films) {
                 $peRGVnetSubnet = '{0}/{1}/{2}' -f 'beardynetwork-uat-rg', 'beardvnet-uat', 'internal'
             }
             'prod' { 
-                $rgVirtualNetworksSubnets = '{0}/{1}/{2},{0}/{1}/{3},{0}/{1}/{4}' -f 'beardednetwork-rg', 'beardvnet', 'Public', 'onprem', 'iamgroot'
+                $rgVirtualNetworksSubnets = '{0}/{1}/{2},{0}/{1}/{3},{0}/{1}/{4}' -f 'beardynetwork-rg', 'beardvnet', 'Public', 'onprem', 'iamgroot'
                 $peRGVnetSubnet = '{0}/{1}/{2}' -f 'beardynetwork-rg', 'beardvnet', 'iamgroot'
             }
             

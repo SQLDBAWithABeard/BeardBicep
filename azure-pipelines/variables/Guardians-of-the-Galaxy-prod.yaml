@@ -3,5 +3,5 @@ variables:
  location: 'uksouth'
  storageAccountName: 'guardiansofthegalaxprod'
  storageAccountContainers: 'starlord,groot,rocket,gamora,drax,ronan,nebula,yondu,collector' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
- rgVirtualNetworksSubnets: 'beardednetwork-rg/beardvnet/Public,beardednetwork-rg/beardvnet/onprem,beardednetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName,RGName/vNetName/subnetName' The vNet/Subnet that will have the Private Endpoints
+ rgVirtualNetworksSubnets: 'beardynetwork-rg/beardvnet/Public,beardynetwork-rg/beardvnet/onprem,beardynetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName,RGName/vNetName/subnetName' The vNet/Subnet that will have the Private Endpoints
  peRGVnetSubnet: 'beardynetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName'
