@@ -1,0 +1,7 @@
+variables:
+ rgName: 'Guardians-of-the-Galaxy-2-prod-rg'
+ location: 'uksouth'
+ storageAccountName: 'guardiansofthegalaxy2prod'
+ storageAccountContainers: 'starlord,babygroot,rocket,gamora,drax,nebula,yondu,ego,mantis,taserface' # IMPORTANT - MUST BE 'containername1,containername2' for containers to be created
+ rgVirtualNetworksSubnets: 'beardednetwork-rg/beardvnet/Public,beardednetwork-rg/beardvnet/onprem,beardednetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName,RGName/vNetName/subnetName' The vNet/Subnet that will have the Private Endpoints
+ peRGVnetSubnet: 'beardednetwork-rg/beardvnet/iamgroot' # IMPORTANT - MUST BE 'RGName/vNetName/subnetName'
