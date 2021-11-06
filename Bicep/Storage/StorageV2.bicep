@@ -78,7 +78,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
 
     networkAcls: {
       bypass: networkAclsBypass
-      virtualNetworkRules: virtualNetworkRules
+      // virtualNetworkRules: virtualNetworkRules
       defaultAction: defaultAction
     }
     accessTier: accessTier
