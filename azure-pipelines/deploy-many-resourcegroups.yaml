@@ -22,10 +22,55 @@ stages:
       variables:          
         - template: variables/${{ film }}-${{ env }}.yaml
       jobs:
-        - template: ..\Bicep\myCustomResources\MultipleResourceGroups.bicep
-          parameters:
-            rgName: ${{ variables.rgName }}
-            storageAccountName: ${{ variables.storageAccountName }}
-            storageAccountContainers: ${{ variables.storageAccountContainers }}
-            rgVirtualNetworksSubnets: ${{ variables.rgVirtualNetworksSubnets }}
+        - job: 'Deploy_Resource_Group'
+          displayName: 'Deploy Prod Network and NSG'
+          pool:
+            vmImage: windows-latest
+          steps:
+          - checkout: self
+            persistCredentials: true
+          - task: AzurePowerShell@5
+            displayName: Deploy The Bicep
+            inputs:
+              azureSubscription: ${{ parameters.azureSubscription }}
+              ScriptType: 'InlineScript'
+              Inline: |
+                 $date = Get-Date -Format yyyyMMddHHmmsss
+                 $deploymentname = 'Deploy_RG_{0}' -f $date # name of the deployment seen in the activity log
+                 Write-Host "Deployment name is $deploymentname"
+               
+                 $templateFile = 'Bicep\myCustomResources\MultipleResourceGroups.bicep' 
+                  if(Test-Path $templateFile){
+                    Write-Host "We have the template file $templateFile"
+                  }  else {
+                      Write-Warning "Can't deploy without the templatefile $templateFile"
+                      [System.Environment]::Exit(1)
+                    }
+                  
+                  $deploymentConfig = @{
+                        Name                                    = $deploymentname
+                        TemplateFile                            = $templateFile
+                        location                                = '${{ variables.location }}'
+                        WhatIf                                  = $WhatIf 
+                        rgName                                  = '${{ variables.rgName }}'
+                        storageAccountName                      = '${{ variables.storageAccountName }}'
+                        storageAccountContainers                = '${{ variables.storageAccountContainers }}'
+                        rgVirtualNetworksSubnets                = '${{ variables.rgVirtualNetworksSubnets }}'
+                        peRGVnetSubnet                          = '${{ variables.peRGVnetSubnet }}'
+                    }
+                    $message = "We are deploying with - {0} " -f ($deploymentConfig | Out-String)
+                    Write-Host $message
+                    try{
+                      New-AzDeployment @deploymentConfig 
+                    } catch {
+                      Write-Warning "We failed to deploy. Error below"
+                      $_  | Format-List -Property * -Force
+                      Write-Warning "Maybe more information here"
+                      (Get-AzDeploymentOperation -DeploymentName $deploymentname).Properties.response | ConvertTo-Json
+                      [System.Environment]::Exit(1)
+                    }
+              azurePowerShellVersion: '6.3.0'
+            env:
+              SYSTEM_ACCESSTOKEN: $(system.accesstoken)
+              pwsh: true
 

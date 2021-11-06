@@ -1,5 +1,6 @@
 variables:
  rgName: Ant-Man-and-the-Wasp-rg
+ location: uksouth
  storageAccountName: antmanandthewaspdev
  storageAccountContainers: antman,wasp
  rgVirtualNetworksSubnets: beardynetwork-dev-rg/beardvnet-dev/Public,beardynetwork-dev-rg/beardvnet-dev/onprem,beardynetwork-dev-rg/beardvnet-dev/internal
