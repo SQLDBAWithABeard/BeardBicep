@@ -138,6 +138,7 @@ module secondsubnet '../Network/SubNet.bicep' = {
     addressPrefix: subnet2addressPrefix
     name: '${vNetName}/${subnet2Name}'
     serviceEndpoints: subnetServiceEndpoints
+    privateEndpointNetworkPolicies: 'Disabled'
   }
   dependsOn:[
     vNet
