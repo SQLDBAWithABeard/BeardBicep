@@ -78,7 +78,7 @@ jobs:
                 Write-Warning "Can't deploy without the templatefile $templateFile"
                 [System.Environment]::Exit(1)
               }
-            }
+              
             $deploymentConfig = @{
                   Name                                    = $deploymentname
                   TemplateFile                            = $templateFile
