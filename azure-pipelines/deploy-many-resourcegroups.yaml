@@ -90,8 +90,8 @@ stages:
                     try{
                       New-AzDeployment @deploymentConfig 
                     } catch {
-                      $error.Count
                       Write-Warning "We failed to deploy. Error below"
+                      Write-Warning "If this doesnt give you al the info - run the code above and fill in the correct vars from the logs"
                       $Error  | ForEach-Object {$_ | Format-List -Property * -Force}
                       $Error  | ForEach-Object {$_.Exception.GetBaseException().Message}
                       Write-Warning "Maybe more information here"
