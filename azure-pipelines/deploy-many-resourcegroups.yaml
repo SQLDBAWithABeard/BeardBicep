@@ -18,12 +18,12 @@ stages:
   - ${{ each env in parameters.environments }}:
     - stage: deploy_films_${{ env }}_ResourceGroup
       dependsOn: [] 
-      variables:          
-        - template: variables/${{ film }}-${{ env }}.yaml
       jobs:
         - ${{ each film in parameters.films }}:
           - job: 'Deploy_Resource_Group'
             displayName: 'Deploy ${{ film }} Resource Group'
+            variables:          
+              - template: variables/${{ film }}-${{ env }}.yaml
             pool:
               vmImage: windows-latest
             steps:
