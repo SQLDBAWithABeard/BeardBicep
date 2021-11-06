@@ -7,7 +7,7 @@ foreach ($film in $films) {
         if (-not (Test-Path $filepath)) {
             New-Item $filepath -ItemType File
         }
-        $storageAccountName = '{0}{1}' -f (($film.ToLower()[0..24] -join '') -replace '-', ''), $env
+        $storageAccountName = '{0}{1}' -f (($film.ToLower()[0..23] -join '') -replace '-', ''), $env
         switch ($env) {
             'dev' { 
                 $rgVirtualNetworksSubnets = '{0}/{1}/{2},{0}/{1}/{3},{0}/{1}/{4}' -f 'beardynetwork-dev-rg', 'beardvnet-dev', 'Public', 'onprem', 'internal'
