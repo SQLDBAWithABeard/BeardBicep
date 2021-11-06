@@ -83,6 +83,6 @@ module privateendpoint '../Network/PrivateEndpointNoDNS.bicep' = {
     ]
     name: '${storageAccountName}-pe'
     privateLinkServiceId: storageaccount.outputs.storageID
-    subnetid: resourceId(subscription().subscriptionId,first(split(peRGVnetSubnet, '/')), 'Microsoft.Network/virtualNetworks/subnets',substring(peRGVnetSubnet, indexOf(peRGVnetSubnet, '/') + 1, (lastIndexOf(peRGVnetSubnet, '/') - indexOf(peRGVnetSubnet, '/')) -1) , last(split(peRGVnetSubnet, '/')))
+    subnetid: resourceId(first(split(peRGVnetSubnet, '/')), 'Microsoft.Network/virtualNetworks/subnets',substring(peRGVnetSubnet, indexOf(peRGVnetSubnet, '/') + 1, (lastIndexOf(peRGVnetSubnet, '/') - indexOf(peRGVnetSubnet, '/')) -1) , last(split(peRGVnetSubnet, '/')))
   }
 }
