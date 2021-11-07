@@ -92,12 +92,22 @@ param subnetServiceEndpoints array = [
 @maxLength(80)
 @description('The name of the NSG')
 param nsgName string = 'gandalf'
+
+var tags = {
+  Role: 'Network'
+  owner: 'Beardy McBeardFace'
+  budget: 'Ben Weissman personal account'
+  bicep: true
+  BenIsAwesome: 'Always'
+}
+
 // the resource group
 module resourceGroup '../ResourceGroup.bicep' = {
   name: 'deploy-${rgName}'
   params: {
     location: rgLocation
     name: rgName
+    tags: tags
   }
 }
 
@@ -111,6 +121,7 @@ module vNet '..//Network/VirtualNetwork.bicep' = {
     name: vNetName
     subnets: subnets
     serviceEndpoints: vNetserviceEndpoints
+    tags: tags
   }
   dependsOn:[
     resourceGroup
@@ -151,6 +162,7 @@ module nsg '../Network/NSG.bicep' = {
   name: 'deploy-${nsgName}'
   params: {
     name: nsgName
+    tags: tags
   }
   dependsOn:[
   resourceGroup
