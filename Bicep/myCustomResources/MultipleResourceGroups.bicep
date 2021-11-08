@@ -21,11 +21,12 @@ param rgVirtualNetworksSubnets array
 param peRGVnetSubnet string
 
 var tags = {
-  Demo: 'true'
-  Conference: 'PassSummit'
+  role: 'films'
+  owner: 'Beardy McBeardFace'
+  budget: 'Ben Weissman personal account'
+  bicep: true
   BenIsAwesome: 'Always'
 }
-
 module resourceGroup '../ResourceGroup.bicep' = {
   name: 'deploy-${rgName}'
   params: {
