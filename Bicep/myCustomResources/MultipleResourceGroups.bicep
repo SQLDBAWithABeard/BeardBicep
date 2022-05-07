@@ -20,6 +20,8 @@ param rgVirtualNetworksSubnets array
 @description('ResourceGroup/VirtualNetwork/Subnet for the Private Endpoint')
 param peRGVnetSubnet string
 
+param adminRgName string = 'NewBeard-Admin'
+
 var tags = {
   role: 'films'
   owner: 'Beardy McBeardFace'
@@ -54,12 +56,12 @@ module storageaccount '../Storage/StorageV2.bicep' = {
 
 resource KeyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = {
   name: 'passbeard-kv'
-  scope: az.resourceGroup('PassBeard-Admin')
+  scope: az.resourceGroup('${adminRgName}')
 }
 
 module adminpwdtokev '../KeyVault/KeyVaultSecret.bicep' = {
   name: 'storagekey-to-kv-${storageAccountName}'
-  scope: az.resourceGroup('PassBeard-Admin')
+  scope: az.resourceGroup('${adminRgName}')
   params: {
     contentType: 'The storage primary key for ${storageAccountName} in ${rgName}'
     name: '${KeyVault.name}/${rgName}-${storageAccountName}-key'
