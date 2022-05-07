@@ -6,6 +6,8 @@ targetScope = 'subscription'
 param rgName string 
 param rgLocation string = 'uksouth'
 
+param keyVaultName string = 'AzureBeard-kv'
+
 @minLength(3)
 @maxLength(24)
 @description('The name of the storage account -3-24	Lowercase letters and numbers.')
@@ -55,7 +57,7 @@ module storageaccount '../Storage/StorageV2.bicep' = {
 }
 
 resource KeyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = {
-  name: 'passbeard-kv'
+  name: keyVaultName
   scope: az.resourceGroup('${adminRgName}')
 }
 
