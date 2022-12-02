@@ -22,7 +22,7 @@ param rgVirtualNetworksSubnets array
 @description('ResourceGroup/VirtualNetwork/Subnet for the Private Endpoint')
 param peRGVnetSubnet string
 
-param adminRgName string = 'NewBeard-Admin'
+param adminRgName string = 'beard-key-vault'
 
 var tags = {
   role: 'films'
