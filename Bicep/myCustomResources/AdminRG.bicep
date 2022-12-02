@@ -7,7 +7,7 @@ var tags = {
   bicep: true
   BenIsAwesome: 'Always'
 }
-var resourceGroupName = 'beard-admin-rg'
+var resourceGroupName = 'beard-key-vault'
 
 module adminResourceGroup '../ResourceGroup.bicep' = {
   name: 'admin-rg-deployment'
@@ -22,7 +22,7 @@ module adminKeyVault '..//KeyVault/keyvault.bicep' = {
   scope: az.resourceGroup(resourceGroupName)
   name: 'keyvault-deployment'
   params: {
-    name: 'beardy-admin-kv'
+    name: 'beard-demo-kv'
     skuName: 'standard'
     tags: tags
     networkAclsDefaultAction: 'Allow' // becasue this is demo
