@@ -6,7 +6,7 @@ targetScope = 'subscription'
 param rgName string 
 param rgLocation string = 'uksouth'
 
-param keyVaultName string = 'AzureBeard-kv'
+param keyVaultName string = 'beard-demo-kv'
 
 @minLength(3)
 @maxLength(24)
@@ -22,7 +22,7 @@ param rgVirtualNetworksSubnets array
 @description('ResourceGroup/VirtualNetwork/Subnet for the Private Endpoint')
 param peRGVnetSubnet string
 
-param adminRgName string = 'beard-demo-kv'
+param adminRgName string = 'beard-key-vault'
 
 var tags = {
   role: 'films'
