@@ -5,7 +5,7 @@ targetScope = 'resourceGroup'
 @description('The name of the Virtual Network')
 param name string
 @description('The location - uses the resource group location by default')
-param location string = ''
+param location string = resourceGroup().location
 @description('A list of address blocks reserved for this virtual network in CIDR notation')
 param addressPrefixes array
 @description('An array of subnet objects - subnetName: Name ; addressPrefix: CIDR notation')
@@ -30,7 +30,7 @@ param dnsServers array = []
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: name
-  location: !empty(location) ? location : resourceGroup().location
+  location: location
   properties: {
     addressSpace: {
       addressPrefixes: [for addressPrefix in addressPrefixes: addressPrefix]

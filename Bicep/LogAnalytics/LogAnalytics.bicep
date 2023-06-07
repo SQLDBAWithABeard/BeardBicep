@@ -3,7 +3,7 @@
 @description('The name of the Log Analytics Workspace - Alphanumerics and hyphens. Start and end with alphanumeric.')
 param name string
 @description('The location for the Log Analystics - defaults to Resource Group Location')
-param location string = ''
+param location string = resourceGroup().location
 @description('The workspace data retention in days. Allowed values are per pricing plan. See pricing tiers documentation for details.')
 param retentionDays int
 @allowed([
@@ -25,7 +25,7 @@ param tags object = {}
 resource loganalytics 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: name
   tags: tags
-  location: location == '' ? resourceGroup().location : location
+  location: location
   properties: {
     sku: {
       name: skuName

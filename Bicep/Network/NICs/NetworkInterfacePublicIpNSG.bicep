@@ -4,7 +4,7 @@ targetScope = 'resourceGroup'
 @description('The name of the Network Interface')
 param name string
 @description('The location - uses the resource group location by default')
-param location string = ''
+param location string = resourceGroup().location
 @minLength(2)
 @maxLength(64)
 @description('The name of the Virtual Network')
@@ -29,7 +29,7 @@ param networkSecurityGroupResourceGroup string = ''
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-06-01' = if (!empty(publicIpAddressName) && !empty(networkSecurityGroup) ) {
   name: name
-  location: !empty(location) ? location : resourceGroup().location
+  location: location
   properties: {
     ipConfigurations: [
       {

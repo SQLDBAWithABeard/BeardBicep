@@ -6,7 +6,7 @@ param name string
 @description('The Tags for the resource')
 param tags object = {}
 @description('The location for the Key Vault - defaults to the resource group location')
-param location string = ''
+param location string = resourceGroup().location
 @allowed([
   'premium'
   'standard'
@@ -55,7 +55,7 @@ param virtualNetworkRules array = []
 
 resource keyvault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
   name: name
-  location: location == '' ? resourceGroup().location : location
+  location: location
   tags: tags
   properties: {
     tenantId: subscription().tenantId
