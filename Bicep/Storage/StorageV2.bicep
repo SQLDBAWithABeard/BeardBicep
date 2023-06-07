@@ -5,7 +5,7 @@ targetScope = 'resourceGroup'
 @description('The name of the storage account -3-24	Lowercase letters and numbers.')
 param name string
 @description('The location - uses the resource group location by default')
-param location string = ''
+param location string = resourceGroup().location
 
 @allowed([
   'Premium_LRS'
@@ -64,7 +64,7 @@ param tags object = {}
 
 resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   name: name
-  location: !empty(location) ? location : resourceGroup().location
+  location: location
   sku: {
     name: skuName
   }

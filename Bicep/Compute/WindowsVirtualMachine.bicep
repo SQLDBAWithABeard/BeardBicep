@@ -4,7 +4,7 @@ targetScope = 'resourceGroup'
 @description('the name of the reosurce')
 param name string
 @description('The location - uses the resource group location by default')
-param location string = ''
+param location string = resourceGroup().location
 @description('The tags')
 param tags object = {}
 @allowed([
@@ -219,7 +219,7 @@ param bootDiagnosticsstorageAccountName string
 
 resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: name
-  location: !empty(location) ? location : resourceGroup().location
+  location: location
   tags: tags
   properties: {
     hardwareProfile: {

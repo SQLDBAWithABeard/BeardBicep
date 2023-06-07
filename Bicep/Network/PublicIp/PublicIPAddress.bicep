@@ -6,7 +6,7 @@ targetScope = 'resourceGroup'
 param name string
 
 @description('The location - uses the resource group location by default')
-param location string = ''
+param location string = resourceGroup().location
 
 @description('The tags')
 param tags object = {}
@@ -45,7 +45,7 @@ param publicIPAllocationMethod string = 'Dynamic'
 
 resource publicIP 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   name: name
-  location: !empty(location) ? location : resourceGroup().location
+  location: location
   tags: tags
   sku: {
     name: skuName
